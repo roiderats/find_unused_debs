@@ -9,7 +9,7 @@ import csv
 DEBUG=False
 FOLLOW_SYMLINKS=False #True
 OLDEST_FIRST=False
-EPOCHTIME_OUTPUT=True
+EPOCHTIME_OUTPUT=False
 SHOW_PROGRESS=False
 PRINT_NONFILEDEBS=False #Drops lots of metapackages, collections of symlinks
 
@@ -91,8 +91,8 @@ for debnr, debname in enumerate(deblist):
     deblist[debnr]=[debname, datestr, hasfiles]
     if SHOW_PROGRESS:
         if debnr % 100 == 0 or debnr == len(deblist) - 1:
-            print(str(debnr + 1) + "/" + str(len(deblist)) + ": " + debname + " " + datestr)
-            sys.stdout.flush()
+            print(str(debnr + 1) + "/" + str(len(deblist)) + ": " + debname + " " + datestr, flush=True)
+            #sys.stdout.flush()
 
 deblist=sorted(deblist, key=lambda x: x[1], reverse=not OLDEST_FIRST)
 
@@ -101,7 +101,7 @@ if SHOW_PROGRESS:
 
 writer=csv.writer(sys.stdout, dialect="unix")
 writer.writerow(["deb name", "timestamp", "has real unignored files"])
-for _ in deblist:
-    if _[2] or PRINT_NONFILEDEBS:
+for r in deblist:
+    if r[2] or PRINT_NONFILEDEBS:
         writer.writerow(r)
 
