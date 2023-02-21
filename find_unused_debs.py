@@ -53,8 +53,25 @@ if DEBUG:
     print("len(deblist):", len(deblist))
 
 for debnr, debname in enumerate(deblist):
-    _ = subprocess.run( ["dpkg","-L", debname], capture_output=True)
-    rawlist = _.stdout.decode("utf-8").split("\n")
+    #_ = subprocess.run( ["dpkg","-L", debname], capture_output=True)
+    #rawlist = _.stdout.decode("utf-8").split("\n")
+    #diverts=True if any(x.startswith("package diverts") for x in rawlist) else False
+
+    with open("/var/lib/dpkg/info/" + debname + ".list") as f:
+        rawlist = f.read().split("\n") 
+
+    # Handle this:
+    # /var/lib/dpkg/diversions
+
+    #if keklist == rawlist:
+    #    print("SAMELIST:", debname)
+    #else:
+    #    print("DIFFLIST:", debname)
+    #    print("rawlist:", rawlist)
+    #    print("keklist:", keklist)
+    ##print("LIST:", rawlist)
+    ##print("HIDE:", rawhide)
+    ##exit()
     stamp=0
     hasfiles=False
     '''
